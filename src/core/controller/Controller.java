@@ -15,6 +15,9 @@ public class Controller {
 
     public void commandLoop() {
 
+        // load student records
+        mainService.preloadStudent();
+
         while (true) {
             mainService.showMenu();
             Scanner sc = new Scanner(System.in);

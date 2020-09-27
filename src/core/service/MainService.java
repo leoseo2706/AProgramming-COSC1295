@@ -1,19 +1,23 @@
 package core.service;
 
 import core.constant.Constants;
+import core.exception.CustomException;
 import core.model.*;
 import core.utils.Utils;
 import core.validator.Validator;
-import core.view.MainView;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class MainService {
 
@@ -149,6 +153,9 @@ public class MainService {
 
     public void shortlistProject() {
 
+        // this will be much faster with FULL OUTER JOIN
+        // but SQLite does not support it.
+
         int shortListThreshold = 5;
         List<Project> projects = jdbcService.findAllActiveProjects();
         int projectSize = projects.size();
@@ -179,10 +186,9 @@ public class MainService {
                 .mapToObj(idx -> updated.get(idx).getId())
                 .collect(Collectors.toList());
 
-        System.out.println("The following project shall be removed based on the info above");
-        leastProjectIds.forEach(p -> {
-            System.out.println(p);
-        });
+        System.out.println("The following project shall be removed based on the info above:");
+        System.out.println(leastProjectIds.stream()
+                .collect(Collectors.joining(", ", "[", "]")));
 
         Utils.checkAndPrint(jdbcService.shortlistProjects(leastProjectIds));
 
@@ -194,6 +200,35 @@ public class MainService {
 //
 //        AtomicInteger index = new AtomicInteger(0);
 //        preferenceMap.entrySet().removeIf(e -> index.getAndIncrement() < shortListSize);
+
+    }
+
+    public void preloadStudent() {
+
+        try {
+            // remove before inserting
+            jdbcService.removeAll();
+
+            String studentFilePath = Utils.getTextProp(Constants.STUDENT_FILE_KEY);
+            Stream<String> lines = Files.lines(Paths.get(studentFilePath));
+
+            Pattern pattern = Pattern.compile(Constants.STUDENT_FILE_REGEX);
+            lines.forEach(line -> {
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.matches()) {
+                    Student student = new Student(matcher.group(1),
+                            Integer.parseInt(matcher.group(2)),
+                            Integer.parseInt(matcher.group(3)),
+                            Integer.parseInt(matcher.group(4)),
+                            Integer.parseInt(matcher.group(5)));
+                    jdbcService.addStudent(student);
+                }
+            });
+
+        } catch (IOException | CustomException e) {
+            System.out.println(Utils.format("Error while preloading student records {0}",
+                    e.getMessage()));
+        }
 
     }
 

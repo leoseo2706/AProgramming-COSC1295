@@ -2,17 +2,12 @@ package core;
 
 import core.controller.Controller;
 import core.utils.Utils;
-import core.view.BaseView;
 import core.view.MainView;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class Main extends Application {
 

@@ -52,7 +52,7 @@ public class Validator {
         // validate existence
         if (companyDAO.isExisted(companyID) != expectedExistence) {
             System.out.print(Utils.format("Company ID {0} {1}existed. Please re-enter: ",
-                    companyID, expectedExistence ? "non-" : ""));
+                    companyID, expectedExistence ? "non-" : Constants.EMPTY));
             return validateCompanyID(sc, expectedExistence);
         }
 
@@ -73,7 +73,7 @@ public class Validator {
         // validate existence
         if (ownerDao.isExisted(ownerID) != expectedExistence) {
             System.out.print(Utils.format("Project owner ID {0} {1}existed. Please re-enter: ",
-                    ownerID, expectedExistence ? "non-" : ""));
+                    ownerID, expectedExistence ? "non-" : Constants.EMPTY));
             return validateOwnerID(sc, expectedExistence);
         }
 
@@ -94,7 +94,7 @@ public class Validator {
         // validate existence
         if (projectDAO.isExisted(projectID) != expectedExistence) {
             System.out.print(Utils.format("Project ID {0} {1}existed. Please re-enter: ",
-                    projectID, expectedExistence ? "non-" : ""));
+                    projectID, expectedExistence ? "non-" : Constants.EMPTY));
             return validateProjectID(sc, expectedExistence);
         }
 
@@ -131,7 +131,7 @@ public class Validator {
         // validate existence
         if (studentDAO.isExisted(studentID) != expectedExistence) {
             System.out.print(Utils.format("Student ID {0} {1}existed. Please re-enter: ",
-                    studentID, expectedExistence ? "non-" : ""));
+                    studentID, expectedExistence ? "non-" : Constants.EMPTY));
             return validateStudentID(sc, expectedExistence);
         }
 

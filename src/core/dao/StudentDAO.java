@@ -40,6 +40,26 @@ public class StudentDAO extends BaseDAO {
         return false;
     }
 
+    public boolean deleteAll() {
+
+        Connection conn = null;
+        try {
+            String sql = "DELETE FROM Student";
+            conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            return pstmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println(
+                    Utils.format("Error while deleting all records of Student: {0}",
+                            e.getMessage())
+            );
+        } finally {
+            close(conn);
+        }
+
+        return false;
+    }
+
     public boolean update(Student student) {
         Connection conn = null;
         try {

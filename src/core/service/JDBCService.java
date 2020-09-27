@@ -48,6 +48,10 @@ public class JDBCService {
         return studentDAO.insert(student);
     }
 
+    public boolean removeAll() {
+        return studentDAO.deleteAll();
+    }
+
     public boolean updateStudent(Student student) {
         return studentDAO.update(student);
     }
@@ -70,7 +74,6 @@ public class JDBCService {
     }
 
     public List<StudentPreference> extractPreferenceList() {
-
         return preferenceDAO.findAllActive();
     }
 

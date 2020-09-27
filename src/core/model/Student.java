@@ -21,6 +21,14 @@ public class Student {
 		this.cStudent2 = cStudent2;
 	}
 
+	public Student(String id, int gradeP, int gradeN, int gradeA, int gradeW) {
+		this.id = id;
+		this.gradeP = gradeP;
+		this.gradeN = gradeN;
+		this.gradeA = gradeA;
+		this.gradeW = gradeW;
+	}
+
 	public Student(String id, int gradeP, int gradeN, int gradeA, int gradeW,
 				   String personality, String cStudent1, String cStudent2,
 				   List<StudentPreference> preferenceList) {
