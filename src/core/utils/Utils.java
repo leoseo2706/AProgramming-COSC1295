@@ -2,9 +2,11 @@ package core.utils;
 
 import core.constant.Constants;
 import core.exception.CustomException;
+import javafx.scene.Scene;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Properties;
@@ -24,6 +26,15 @@ public class Utils {
 
     public static String format(String msgFormat, String... args) {
         return MessageFormat.format(msgFormat, args);
+    }
+
+    public static void loadStyleResource(Scene scene) {
+        try {
+            URL url = Utils.class.getClassLoader().getResource("style.css");
+            scene.getStylesheets().add(url.toExternalForm());
+        } catch (Exception e) {
+            // ignore. failed to load css style
+        }
     }
 
     public static void loadResource() {
@@ -59,7 +70,7 @@ public class Utils {
     public static int getIntProp(String key) throws CustomException {
         try {
             return Integer.parseInt(getTextProp(key));
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }

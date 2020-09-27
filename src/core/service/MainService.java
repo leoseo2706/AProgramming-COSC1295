@@ -4,6 +4,9 @@ import core.constant.Constants;
 import core.model.*;
 import core.utils.Utils;
 import core.validator.Validator;
+import core.view.MainView;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.util.Comparator;
 import java.util.List;

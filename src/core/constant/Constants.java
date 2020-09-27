@@ -18,4 +18,7 @@ public class Constants {
 
     public final static String MAX_STUDENT_KEY = "max.student.threshold";
     public final static String MAX_PERSONALITY_KEY = "max.personality.threshold";
+    public final static int MAX_TEAM_NUMBER = 5;
+    public final static int MAX_TEAM_MEMBER = 4;
+
 }
