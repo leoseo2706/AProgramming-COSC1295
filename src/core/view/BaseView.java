@@ -146,7 +146,7 @@ public class BaseView {
         equivalentBtn.setClicked(!equivalentBtn.isClicked());
     }
 
-    public boolean validateSwapListener(UIModel model, TextField tf) {
+    public boolean validateAddListener(UIModel model, TextField tf) {
 
         Map<String, Integer> selectedIndexes = model.getSelectedIndexes();
         List<String> ids = model.getAllStudents().stream().map(x -> x.getId()).collect(Collectors.toList());
@@ -171,7 +171,7 @@ public class BaseView {
         return true;
     }
 
-    public boolean validateSwapListener(UIModel model) {
+    public boolean validateAddListener(UIModel model) {
 
         Map<String, Integer> selectedIndexes = model.getSelectedIndexes();
         List<String> ids = model.getAllStudents().stream().map(x -> x.getId()).collect(Collectors.toList());
