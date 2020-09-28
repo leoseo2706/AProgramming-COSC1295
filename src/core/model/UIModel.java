@@ -4,8 +4,19 @@ import java.util.*;
 
 public class UIModel {
 
+    /**
+     * A list <TeamName, Index>
+     */
     private Map<String, Integer> selectedIndexes;
+
+    /**
+     * A list of <TeamName, Model>
+     */
     private Map<String, List<FormedMember>> formedTeam;
+
+    /**
+     * The entire student list
+     */
     private List<Student> allStudents;
 
     public UIModel(List<Student> allStudents) {

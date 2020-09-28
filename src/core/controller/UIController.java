@@ -44,16 +44,17 @@ public class UIController {
 
         // add button
         view.getAddButton().setOnAction(event -> {
-            if (view.validateAddListener(model, view.getStudentTF())) {
+            if (view.validateSwapListener(model, view.getStudentTF())) {
                 service.formTeam(view.getStudentTF().getText());
             }
         });
 
         // swap button
         view.getSwapButton().setOnAction(event -> {
-
+            if (view.validateSwapListener(model)) {
+                service.swapMember();
+            }
         });
-
 
     }
 }

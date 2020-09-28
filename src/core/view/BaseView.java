@@ -1,13 +1,10 @@
 package core.view;
 
 import core.constant.Constants;
-import core.model.FormedMember;
 import core.model.UIModel;
 import core.utils.Utils;
-import javafx.css.CssMetaData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -15,7 +12,6 @@ import javafx.scene.layout.Region;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BaseView {
@@ -24,26 +20,6 @@ public class BaseView {
 
     public BaseView(int inset) {
         createAndConfigurePane(inset);
-    }
-
-    protected void addRowAll(Node... nodes) {
-        if (grdPane != null) {
-            int count = 0;
-            for (Node node : nodes) {
-                grdPane.addRow(count, node);
-                count++;
-            }
-        }
-    }
-
-    protected void addColAll(Node... nodes) {
-        if (grdPane != null) {
-            int count = 0;
-            for (Node node : nodes) {
-                grdPane.addColumn(count, node);
-                count++;
-            }
-        }
     }
 
     protected void createAndConfigurePane(int inset) {
@@ -83,23 +59,6 @@ public class BaseView {
         if (cb != null) {
             cb.setSelected(true);
         }
-    }
-
-    public boolean containCssClass(String cssClass, Region node) {
-        return getActiveClass(node).contains(cssClass);
-    }
-
-    public String getActiveClass(Region node) {
-        try {
-            CssMetaData cssMetaData = node.getCssMetaData().stream()
-                    .filter(p -> p.getProperty().equals("-fx-region-background"))
-                    .findFirst().orElse(null);
-            System.out.println("test: " + cssMetaData.toString());
-            return cssMetaData.toString();
-        } catch (Exception e) {
-            // ignore
-        }
-        return Constants.EMPTY;
     }
 
     public void addButtonListener(List<TeamInfoView> teamViewList,
@@ -187,7 +146,7 @@ public class BaseView {
         equivalentBtn.setClicked(!equivalentBtn.isClicked());
     }
 
-    public boolean validateAddListener(UIModel model, TextField tf) {
+    public boolean validateSwapListener(UIModel model, TextField tf) {
 
         Map<String, Integer> selectedIndexes = model.getSelectedIndexes();
         List<String> ids = model.getAllStudents().stream().map(x -> x.getId()).collect(Collectors.toList());
@@ -212,6 +171,22 @@ public class BaseView {
         return true;
     }
 
+    public boolean validateSwapListener(UIModel model) {
+
+        Map<String, Integer> selectedIndexes = model.getSelectedIndexes();
+        List<String> ids = model.getAllStudents().stream().map(x -> x.getId()).collect(Collectors.toList());
+        int size = selectedIndexes.size();
+        if (size == 0) {
+            showErrAlert(Utils.getTextPropSilently(Constants.EMPTY_CELL_KEY));
+            return false;
+        } else if (size != 2) {
+            showErrAlert(Utils.getTextPropSilently(Constants.INVALID_CELL_NUMBER_KEY));
+            return false;
+        }
+
+        return true;
+    }
+
     private boolean containFormedMember(UIModel model, String studentId) {
 
         // only one element inside
@@ -220,16 +195,13 @@ public class BaseView {
         int index = model.getSelectedIndexes()
                 .values().stream().findAny().orElse(Constants.INVALID);
 
-
         // first time
         if (Utils.isEmpty(model.getFormedTeam())) {
             return false;
         }
 
-        boolean flag = model.getFormedTeam().entrySet().stream().flatMap(x -> x.getValue().stream())
-                .filter(x -> x.getStudentId().equals(studentId) || x.getIndex() == index)
-                .findAny().isPresent();
-
+        boolean flag = model.getFormedTeam().values().stream().flatMap(x -> x.stream())
+                .anyMatch(x -> x.getStudentId().equals(studentId) || x.getIndex() == index);
 
         return flag;
     }
@@ -262,26 +234,6 @@ public class BaseView {
             tf.setText(textToSet);
         }
     }
-
-    public void clearTextField(TextField tf) {
-        tf.setText(Constants.EMPTY);
-    }
-
-
-    public String validateTextField(TextField tf) {
-        if (tf == null) {
-            return null;
-        }
-        String searchID = tf.getText();
-        if (Utils.isBlank(searchID)) {
-            showErrAlert(Constants.EMPTY_STUDENT_KEY);
-        } else {
-            String[] parts = searchID.split(Constants.COMMA);
-            return parts.length == 1 ? parts[0] : null;
-        }
-        return null;
-    }
-
 
     public Parent asParent() {
         return grdPane;

@@ -1,6 +1,5 @@
 package core.dao;
 
-import core.model.Company;
 import core.model.ProjectOwner;
 import core.utils.Utils;
 

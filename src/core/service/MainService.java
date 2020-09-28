@@ -188,16 +188,6 @@ public class MainService {
                 .collect(Collectors.joining(", ", "[", "]")));
 
         Utils.checkAndPrint(jdbcService.shortlistProjects(leastProjectIds));
-
-        // sorting in desc
-//        preferenceMap = preferenceMap.entrySet().stream()
-//                .sorted(Map.Entry.<String, Integer>comparingByValue())
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                        (o1, o2) -> o1, LinkedHashMap::new));
-//
-//        AtomicInteger index = new AtomicInteger(0);
-//        preferenceMap.entrySet().removeIf(e -> index.getAndIncrement() < shortListSize);
-
     }
 
     public List<Student> preloadStudent() {
@@ -244,13 +234,8 @@ public class MainService {
         System.out.println("D. Capture Student Personalitites");
         System.out.println("E. Add Student Preferences");
         System.out.println("F. Shortlist Projects");
-        System.out.println("G. Forms Teams");
         System.out.println("H. Display Team Fitness Metrics");
         System.out.println("Q: Exit");
         System.out.print("Your choice is: ");
-    }
-
-    public void formTeam() {
-
     }
 }

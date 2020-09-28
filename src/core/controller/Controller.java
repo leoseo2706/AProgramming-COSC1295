@@ -5,7 +5,6 @@ import core.service.MainService;
 import core.utils.Utils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Controller {
@@ -14,10 +13,6 @@ public class Controller {
 
     public Controller() {
         this.mainService = new MainService();
-    }
-
-    public List<Student> preloadStudent() {
-        return  mainService.preloadStudent();
     }
 
     public void commandLoop() {
@@ -64,5 +59,9 @@ public class Controller {
             System.out.println();
         }
 
+    }
+
+    public List<Student> preloadStudent() {
+        return  mainService.preloadStudent();
     }
 }

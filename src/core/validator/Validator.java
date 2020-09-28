@@ -204,7 +204,7 @@ public class Validator {
 
     public String validatePersonality(Scanner sc) {
         String personality = sc.nextLine();
-        if (CharacteristicEnum.lookup(personality) == null) {
+        if (CharacteristicEnum.lookup(personality.toUpperCase()) == null) {
             System.out.println("Incorrect range. Please check valid values below.");
             CharacteristicEnum.getMap().forEach((k, v) -> {
                 System.out.println(Utils.format("{0} ({1}): {2}",
