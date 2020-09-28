@@ -46,7 +46,8 @@ public class Controller {
                 case "F":
                     mainService.shortlistProject();
                     break;
-
+                case "H":
+                    break;
                 case "Q" :
                     System.out.println("Bye bye then!");
                     System.exit(0);

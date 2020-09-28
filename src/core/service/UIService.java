@@ -1,20 +1,15 @@
 package core.service;
 
 import core.constant.Constants;
-import core.model.FormedMember;
-import core.model.UIModel;
+import core.model.*;
 import core.utils.Utils;
-import core.view.CustomButton;
 import core.view.MainView;
 import core.view.TeamInfoView;
-import javafx.scene.control.Button;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UIService {
@@ -83,7 +78,10 @@ public class UIService {
     }
 
     public void formTeam(String studentID) {
-
+        Map<String, Student> studentsMap = uiModel.getAllStudents().stream().collect(Collectors.toMap(
+                Student::getId,
+                Function.identity(), (o1, o2) -> o1
+        ));
         Map<String, List<FormedMember>> formedTeam = uiModel.getFormedTeam();
         FormedMember member = new FormedMember();
         String teamName = null;
@@ -91,6 +89,7 @@ public class UIService {
             teamName = entry.getKey();
             member.setIndex(entry.getValue());
             member.setStudentId(studentID);
+            member.setStudent(studentsMap.get(studentID));
         }
 
         List<FormedMember> members = formedTeam.get(teamName);
@@ -101,13 +100,94 @@ public class UIService {
         members.add(member);
         formedTeam.put(teamName, members);
 
+        //get metrics 1
+        TeamSkillCompetency tsc = studentSkillCompetency(formedTeam);
+
         // assign to UI list
         List<TeamInfoView> uiList = view.getTeamViewList();
 
         // UI reflection
         printModelToView(uiList, formedTeam);
+    }
 
+    public TeamSkillCompetency studentSkillCompetency(Map<String, List<FormedMember>> teamList) {
+        if (Utils.isEmpty(teamList)) {
+            return null;
+        }
+        List<Integer> teamsAverage = new ArrayList<Integer>();
+        Map<String, Integer> teamSkills = new HashMap<>();
 
+        teamList.forEach((k, v) -> {
+            AtomicInteger sumW = new AtomicInteger();
+            AtomicInteger sumP = new AtomicInteger();
+            AtomicInteger sumN = new AtomicInteger();
+            AtomicInteger sumA = new AtomicInteger();
+            v.forEach((member) -> {
+                sumW.addAndGet(member.getStudent().getGradeW());
+                sumA.addAndGet(member.getStudent().getGradeA());
+                sumN.addAndGet(member.getStudent().getGradeN());
+                sumP.addAndGet(member.getStudent().getGradeP());
+            });
+            int size = v.size();
+            int averageA = sumA.get() / size;
+            int averageP = sumP.get() / size;
+            int averageN = sumN.get() / size;
+            int averageW = sumW.get() / size;
+            int teamAverage = averageA + averageP + averageN + averageW;
+            teamsAverage.add(teamAverage);
+            teamSkills.put(k, teamAverage);
+        });
+        int standardDeviation = calculateStandardDeviation(teamsAverage);
+        TeamSkillCompetency result = new TeamSkillCompetency(teamSkills, standardDeviation);
+        return result;
+    }
+
+    public SkillShortfall skillShortfall (Map<String, List<FormedMember>> teamList){
+        if (Utils.isEmpty(teamList)) {
+            return null;
+        }
+        List<Integer> teamsAverage = new ArrayList<Integer>();
+        Map<String, Integer> teamSkills = new HashMap<>();
+
+        teamList.forEach((k, v) -> {
+            AtomicInteger sumW = new AtomicInteger();
+            AtomicInteger sumP = new AtomicInteger();
+            AtomicInteger sumN = new AtomicInteger();
+            AtomicInteger sumA = new AtomicInteger();
+            v.forEach((member) -> {
+                sumW.addAndGet(member.getStudent().getGradeW());
+                sumA.addAndGet(member.getStudent().getGradeA());
+                sumN.addAndGet(member.getStudent().getGradeN());
+                sumP.addAndGet(member.getStudent().getGradeP());
+            });
+            int size = v.size();
+            int averageA = sumA.get() / size;
+            int averageP = sumP.get() / size;
+            int averageN = sumN.get() / size;
+            int averageW = sumW.get() / size;
+            int teamAverage = averageA + averageP + averageN + averageW;
+            teamsAverage.add(teamAverage);
+            teamSkills.put(k, teamAverage);
+        });
+
+    }
+
+    private int calculateStandardDeviation(List<Integer> numArray) {
+        int sum = 0;
+        int standardDeviation = 0;
+        int length = numArray.size();
+
+        for (Integer num : numArray) {
+            sum += num;
+        }
+
+        int mean = sum / length;
+
+        for (Integer num : numArray) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return (int) Math.sqrt(standardDeviation / length);
     }
 
     private void printModelToView(List<TeamInfoView> uiList,
@@ -121,4 +201,5 @@ public class UIService {
             });
         });
     }
+
 }

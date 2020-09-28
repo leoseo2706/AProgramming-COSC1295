@@ -3,14 +3,15 @@ package core.model;
 import java.util.Objects;
 
 public class FormedMember {
-
+    private Student student;
     private String studentId;
     private int index;
 
     public FormedMember() {
     }
 
-    public FormedMember(String studentId, int index) {
+    public FormedMember(Student student, String studentId, int index) {
+        this.student = student;
         this.studentId = studentId;
         this.index = index;
     }
@@ -21,6 +22,14 @@ public class FormedMember {
 
     public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public void setStudent(Student student){
+        this.student = student;
+    }
+
+    public Student getStudent(){
+        return student;
     }
 
     public int getIndex() {

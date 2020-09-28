@@ -1,20 +1,20 @@
-s1 P 4 N 3 A 2 W 1   
-s2 P 3 N 2 A 1 W 4   
-s3 P 4 N 1 A 2 W 1   
-s4 P 1 N 4 A 3 W 4   
-s5 P 3 N 3 A 2 W 4   
-s6 P 4 N 2 A 3 W 3   
-s7 P 4 N 1 A 3 W 4   
-s8 P 1 N 4 A 2 W 2   
-s9 P 2 N 3 A 4 W 3   
-s10 P 3 N 2 A 1 W 4 
-s11 P 4 N 1 A 1 W 2   
-s12 P 1 N 4 A 1 W 3   
-s13 P 2 N 3 A 2 W 4   
-s14 P 3 N 2 A 4 W 4   
-s15 P 4 N 1 A 3 W 3   
-s16 P 1 N 1 A 2 W 2   
-s17 P 2 N 2 A 1 W 1   
-s18 P 3 N 3 A 3 W 3   
-s19 P 4 N 2 A 4 W 1   
-s20 P 1 N 2 A 2 W 1   
+s1 P 4 N 3 A 2 W 1 A s3 s5
+s2 P 3 N 2 A 1 W 4 B s6 s12
+s3 P 4 N 1 A 2 W 1 C s9 s11
+s4 P 1 N 4 A 3 W 4 D s1 s10
+s5 P 3 N 3 A 2 W 4 A s1 s2
+s6 P 4 N 2 A 3 W 3 B s18 s12
+s7 P 4 N 1 A 3 W 4 C s9 s8
+s8 P 1 N 4 A 2 W 2 D s15 s17
+s9 P 2 N 3 A 4 W 3 A s9 s19
+s10 P 3 N 2 A 1 W 4 B s16 s20
+s11 P 4 N 1 A 1 W 2 C s19 s20
+s12 P 1 N 4 A 1 W 3 D s4 s8
+s13 P 2 N 3 A 2 W 4 A s8 s17
+s14 P 3 N 2 A 4 W 4 B s19 s15
+s15 P 4 N 1 A 3 W 3 C s7 s18
+s16 P 1 N 1 A 2 W 2 D s9 s19
+s17 P 2 N 2 A 1 W 1 A s12 s9
+s18 P 3 N 3 A 3 W 3 B s15 s16
+s19 P 4 N 2 A 4 W 1 C s4 s13
+s20 P 1 N 2 A 2 W 1 D s1 s20
