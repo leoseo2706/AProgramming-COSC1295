@@ -231,7 +231,7 @@ public class MainService {
         System.out.println("A. Add Company");
         System.out.println("B. Add Project Owner");
         System.out.println("C. Add Project");
-        System.out.println("D. Capture Student Personalitites");
+        System.out.println("D. Capture Student Personalities");
         System.out.println("E. Add Student Preferences");
         System.out.println("F. Shortlist Projects");
         System.out.println("H. Display Team Fitness Metrics");
