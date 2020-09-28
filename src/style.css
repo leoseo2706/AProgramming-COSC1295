@@ -1,3 +1,58 @@
 .custom-team-1 {
-    -fx-background-color: #ff8c00;
+    -fx-background-color: sandybrown;
+}
+
+.custom-team-2 {
+    -fx-background-color: lightgoldenrodyellow;
+}
+
+.custom-team-3 {
+    -fx-background-color: lawngreen;
+}
+
+.custom-team-4 {
+    -fx-background-color: red;
+}
+
+.custom-team-5 {
+    -fx-background-color: lightskyblue;
+}
+
+.grey-color {
+    -fx-background-color: gainsboro;
+}
+
+.big-check-box > .box {
+    -fx-padding: 5px 5px 8px 8px;
+}
+
+.big-check-box > .box > .mark {
+    -fx-padding: 6px 6px 8px 8px;
+}
+
+.highlight {
+    -fx-background-color: darkgray;
+    -fx-background-radius: 5, 5, 4;
+    -fx-background-insets: 0 0 -1 0, 0, 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0.0, 0, 1);
+    -fx-text-alignment: center;
+}
+
+.highlight:hover {
+
+    -fx-background-color: dimgray;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0.0, 0, 1);
+    -fx-text-alignment: center;
+}
+
+.busy {
+
+    -fx-background-color: #B3B3B3;
+    -fx-text-alignment: center;
+}
+
+.busy:hover {
+
+    -fx-background-color: cdcbcb;
+    -fx-text-alignment: center;
 }

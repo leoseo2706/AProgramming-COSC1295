@@ -1,8 +1,11 @@
 package core.controller;
 
+import core.model.Student;
 import core.service.MainService;
 import core.utils.Utils;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Controller {
@@ -13,10 +16,11 @@ public class Controller {
         this.mainService = new MainService();
     }
 
-    public void commandLoop() {
+    public List<Student> preloadStudent() {
+        return  mainService.preloadStudent();
+    }
 
-        // load student records
-        mainService.preloadStudent();
+    public void commandLoop() {
 
         while (true) {
             mainService.showMenu();

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -22,6 +23,10 @@ public class Utils {
 
     public static boolean isEmpty(Collection col) {
         return col == null || col.isEmpty();
+    }
+
+    public static boolean isEmpty(Map map) {
+        return map == null || map.isEmpty();
     }
 
     public static String format(String msgFormat, String... args) {

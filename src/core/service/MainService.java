@@ -9,10 +9,7 @@ import core.validator.Validator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -203,7 +200,9 @@ public class MainService {
 
     }
 
-    public void preloadStudent() {
+    public List<Student> preloadStudent() {
+
+        List<Student> students = new ArrayList<>();
 
         try {
             // remove before inserting
@@ -216,11 +215,13 @@ public class MainService {
             lines.forEach(line -> {
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.matches()) {
-                    Student student = new Student(matcher.group(1),
+                    String studentID = matcher.group(1);
+                    Student student = new Student(studentID,
                             Integer.parseInt(matcher.group(2)),
                             Integer.parseInt(matcher.group(3)),
                             Integer.parseInt(matcher.group(4)),
                             Integer.parseInt(matcher.group(5)));
+                    students.add(student);
                     jdbcService.addStudent(student);
                 }
             });
@@ -229,6 +230,8 @@ public class MainService {
             System.out.println(Utils.format("Error while preloading student records {0}",
                     e.getMessage()));
         }
+
+        return students;
 
     }
 
