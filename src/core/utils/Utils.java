@@ -29,6 +29,7 @@ public class Utils {
         return map == null || map.isEmpty();
     }
 
+    @SuppressWarnings("varargsCast")
     public static String format(String msgFormat, String... args) {
         return MessageFormat.format(msgFormat, args);
     }
