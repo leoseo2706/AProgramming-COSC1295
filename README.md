@@ -14,7 +14,8 @@ How to run
 + max.student.threshold <Maximum number of students. This can be modified flexibly but effective only in console. UI was hardcoded with 5 screens>
 + max.personality.threshold <Maximum number of personalities. Same above>
 + Other alert properties
-5. Run
+5. Re-run database schema if needed <unzip the file Database.zip and run the schema.sql>
+6. Run the app.
 
 ***NOTE***
 The project can be run through console directly.
