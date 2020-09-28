@@ -29,7 +29,7 @@ public class MainView extends BaseView {
 
     public void createLayout() {
 
-        int count = 0;
+        int count = 1;
         for (int i = 1; i <= Constants.MAX_TEAM_NUMBER; i++) {
 
             VBox teamVB = new VBox();
@@ -46,11 +46,11 @@ public class MainView extends BaseView {
 
             // team member
             for (int z = 1; z <= Constants.MAX_TEAM_MEMBER; z++) {
-                CustomButton memberName = new CustomButton();
+                CustomButton memberName = new CustomButton(count);
                 memberName.setPrefWidth(100);
                 memberName.setAlignment(Pos.CENTER);
 
-                CustomCheckbox memberCB = new CustomCheckbox();
+                CustomCheckbox memberCB = new CustomCheckbox(count);
                 memberCB.getStyleClass().add("big-check-box");
 
                 HBox memberHB = new HBox(memberName, memberCB);
@@ -58,7 +58,7 @@ public class MainView extends BaseView {
                 memberHB.setAlignment(Pos.CENTER);
 
                 teamVBChildren.add(memberHB);
-                teamViewList.add(new TeamInfoView(teamLabel, memberName, memberCB, count));
+                teamViewList.add(new TeamInfoView(teamLabel, memberName, memberCB));
                 count ++;
             }
 

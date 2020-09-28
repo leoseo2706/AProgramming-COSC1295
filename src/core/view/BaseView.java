@@ -1,6 +1,8 @@
 package core.view;
 
 import core.constant.Constants;
+import core.model.FormedMember;
+import core.model.UIModel;
 import core.utils.Utils;
 import javafx.css.CssMetaData;
 import javafx.geometry.Insets;
@@ -12,6 +14,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BaseView {
@@ -98,124 +102,160 @@ public class BaseView {
         return Constants.EMPTY;
     }
 
-    public void addButtonListener(CustomButton button, TextField textField,
-                                  List<TeamInfoView> teamViewList, TeamInfoView appliedView) {
+    public void addButtonListener(List<TeamInfoView> teamViewList,
+                                  TeamInfoView appliedView, CustomButton button, UIModel model) {
 
-        if (Utils.isEmpty(teamViewList) || appliedView == null
-                || button == null || textField == null) {
+        if (Utils.isEmpty(teamViewList) || appliedView == null || button == null) {
             return;
         }
 
-        List<CustomButton> btnList = teamViewList.stream()
-                .filter(e -> e.getTeamName().getText().equals(appliedView.getTeamName().getText()))
+        String teamLabel = appliedView.getTeamName().getText();
+        List<CustomButton> btnToClear = teamViewList.stream()
+                .filter(e -> e.getTeamName().getText().equals(teamLabel)
+                        && e.getTeamMember().getIndex() != button.getIndex())
                 .map(e -> e.getTeamMember())
                 .collect(Collectors.toList());
 
-        List<CustomCheckbox> cbList = teamViewList.stream()
-                .filter(e -> e.getTeamName().getText().equals(appliedView.getTeamName().getText()))
+        List<CustomCheckbox> cbToClear = teamViewList.stream()
+                .filter(e -> e.getTeamName().getText().equals(teamLabel)
+                        && e.getTeamMemberCB().getIndex() != button.getIndex())
                 .map(e -> e.getTeamMemberCB())
                 .collect(Collectors.toList());
 
-        CustomCheckbox checkBox = teamViewList.stream()
-                .filter(e -> e.getTeamMemberCB().getLabel().equals(button.getText()))
+        CustomCheckbox equivalentCB = teamViewList.stream()
+                .filter(e -> e.getTeamMemberCB().getIndex() == button.getIndex())
                 .map(e -> e.getTeamMemberCB())
                 .findAny().orElse(null);
 
         // clear all team buttons
-        clearAllButtons(btnList, textField);
-        clearAllCheckbox(cbList, textField);
+        clearAllButtons(btnToClear);
+        clearAllCheckbox(cbToClear);
 
         // toggle button
         if (button.isClicked()) {
-            System.out.print("Already clicked. Unclick");
-            uncheck(checkBox);
-            clearButton(button);
+            uncheck(equivalentCB);
+            dimButton(button);
+            model.getSelectedIndexes().remove(teamLabel);
         } else {
-            System.out.print("Not clicked. Click");
             highlightButton(button);
-            check(checkBox);
+            check(equivalentCB);
+            model.getSelectedIndexes().put(teamLabel, button.getIndex());
         }
+
         // change state
-        setText(textField, teamViewList);
         button.setClicked(!button.isClicked());
-        System.out.println(". Setting to " + button.isClicked());
     }
 
-    public void addCheckboxListener(CustomCheckbox checkBox,
-                                    TextField textField, List<TeamInfoView> teamViewList,
-                                    TeamInfoView appliedView) {
+    public void addCheckboxListener(List<TeamInfoView> teamViewList,
+                                    TeamInfoView appliedView, CustomCheckbox checkbox, UIModel model) {
 
-        if (Utils.isEmpty(teamViewList) || appliedView == null
-                || checkBox == null || textField == null) {
+        if (Utils.isEmpty(teamViewList) || appliedView == null || checkbox == null) {
             return;
         }
 
-        List<CustomCheckbox> cbList = teamViewList.stream()
-                .filter(e -> e.getTeamName().getText().equals(appliedView.getTeamName().getText()))
+        String teamLabel = appliedView.getTeamName().getText();
+        List<CustomCheckbox> cbToClear = teamViewList.stream()
+                .filter(e -> e.getTeamName().getText().equals(teamLabel)
+                        && e.getTeamMemberCB().getIndex() != checkbox.getIndex())
                 .map(e -> e.getTeamMemberCB())
                 .collect(Collectors.toList());
 
-        List<CustomButton> btnList = teamViewList.stream()
-                .filter(e -> e.getTeamName().getText().equals(appliedView.getTeamName().getText()))
+        List<CustomButton> btnToClear = teamViewList.stream()
+                .filter(e -> e.getTeamName().getText().equals(teamLabel)
+                        && e.getTeamMember().getIndex() != checkbox.getIndex())
                 .map(e -> e.getTeamMember())
                 .collect(Collectors.toList());
 
-        CustomButton button = teamViewList.stream()
-                .filter(e -> e.getTeamMember().getText().equals(checkBox.getLabel()))
+        CustomButton equivalentBtn = teamViewList.stream()
+                .filter(e -> e.getTeamMemberCB().getIndex() == checkbox.getIndex())
                 .map(e -> e.getTeamMember())
                 .findAny().orElse(null);
 
-        // clear all other buttons
-        clearAllCheckbox(cbList, textField);
-        clearAllButtons(btnList, textField);
+        // clear all team buttons
+        clearAllButtons(btnToClear);
+        clearAllCheckbox(cbToClear);
 
         // toggle button
-        if (checkBox.isSelected()) {
-            System.out.print("Already clicked. Unclick");
-            dimButton(button);
-            clearCB(checkBox);
+        if (!checkbox.isSelected()) {
+            dimButton(equivalentBtn);
+            model.getSelectedIndexes().remove(teamLabel);
         } else {
-            System.out.print("Not clicked. Click");
-            highlightButton(button);
-            check(checkBox);
+            highlightButton(equivalentBtn);
+            model.getSelectedIndexes().put(teamLabel, checkbox.getIndex());
         }
         // change state
-        setText(textField, teamViewList);
-        button.setClicked(!button.isClicked());
-        System.out.println(". Setting to " + button.isClicked());
+        equivalentBtn.setClicked(!equivalentBtn.isClicked());
     }
 
-    public void clearAllCheckbox(List<CustomCheckbox> cbList, TextField tf) {
-        if (!Utils.isEmpty(cbList) && tf != null) {
+    public boolean validateAddListener(UIModel model, TextField tf) {
+
+        Map<String, Integer> selectedIndexes = model.getSelectedIndexes();
+        List<String> ids = model.getAllStudents().stream().map(x -> x.getId()).collect(Collectors.toList());
+        int size = selectedIndexes.size();
+        if (tf == null || Utils.isBlank(tf.getText())) {
+            showErrAlert(Utils.getTextPropSilently(Constants.EMPTY_STUDENT_KEY));
+            return false;
+        } else if (size == 0) {
+            showErrAlert(Utils.getTextPropSilently(Constants.EMPTY_CELL_KEY));
+            return false;
+        } else if (size > 1) {
+            showErrAlert(Utils.getTextPropSilently(Constants.MULTIPLE_CELL_KEY));
+            return false;
+        } else if (!ids.contains(tf.getText())) {
+            showErrAlert(Utils.getTextPropSilently(Constants.INVALID_STUDENT_ID_KEY));
+            return false;
+        } else if (containFormedMember(model, tf.getText())) {
+            showErrAlert(Utils.getTextPropSilently(Constants.EXISTED_STUDENT_ID_KEY));
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean containFormedMember(UIModel model, String studentId) {
+
+        // only one element inside
+        String teamName = model.getSelectedIndexes().keySet()
+                .stream().findAny().orElse(Constants.EMPTY);
+        int index = model.getSelectedIndexes()
+                .values().stream().findAny().orElse(Constants.INVALID);
+
+
+        // first time
+        if (Utils.isEmpty(model.getFormedTeam())) {
+            return false;
+        }
+
+        boolean flag = model.getFormedTeam().entrySet().stream().flatMap(x -> x.getValue().stream())
+                .filter(x -> x.getStudentId().equals(studentId) || x.getIndex() == index)
+                .findAny().isPresent();
+
+
+        return flag;
+    }
+
+    public void clearAllCheckbox(List<CustomCheckbox> cbList) {
+        if (!Utils.isEmpty(cbList)) {
             cbList.forEach(cb -> {
-                clearCB(cb);
+                uncheck(cb);
             });
-            clearTextField(tf);
         }
     }
 
-    public void clearAllButtons(List<CustomButton> btnList, TextField tf) {
-        if (!Utils.isEmpty(btnList) && tf != null) {
+    public void clearAllButtons(List<CustomButton> btnList) {
+        if (!Utils.isEmpty(btnList)) {
             btnList.forEach(b -> {
                 clearButton(b);
-                System.out.println("cleared " + b.getText());
             });
-            clearTextField(tf);
         }
     }
 
-
-    private void clearCB(CustomCheckbox cb) {
-        uncheck(cb);
-    }
-
-    private void clearButton(CustomButton btn) {
+    public void clearButton(CustomButton btn) {
         dimButton(btn);
         btn.setClicked(false);
     }
 
     public void setText(TextField tf, List<TeamInfoView> teamViewList) {
-
         if (tf != null) {
             String textToSet = teamViewList.stream().filter(e -> e.getTeamMemberCB().isSelected())
                     .map(e -> e.getTeamMember().getText()).collect(Collectors.joining(Constants.COMMA));
@@ -223,18 +263,23 @@ public class BaseView {
         }
     }
 
-    private void clearTextField(TextField tf) {
+    public void clearTextField(TextField tf) {
         tf.setText(Constants.EMPTY);
     }
 
-    public void addCBListener(CheckBox cb) {
-        if (cb != null) {
 
-            if (cb.isSelected()) {
-
-            }
-
+    public String validateTextField(TextField tf) {
+        if (tf == null) {
+            return null;
         }
+        String searchID = tf.getText();
+        if (Utils.isBlank(searchID)) {
+            showErrAlert(Constants.EMPTY_STUDENT_KEY);
+        } else {
+            String[] parts = searchID.split(Constants.COMMA);
+            return parts.length == 1 ? parts[0] : null;
+        }
+        return null;
     }
 
 

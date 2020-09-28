@@ -249,4 +249,8 @@ public class MainService {
         System.out.println("Q: Exit");
         System.out.print("Your choice is: ");
     }
+
+    public void formTeam() {
+
+    }
 }

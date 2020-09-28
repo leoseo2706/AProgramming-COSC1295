@@ -1,59 +1,51 @@
 package core.controller;
 
-import core.constant.Constants;
 import core.model.Student;
 import core.model.UIModel;
-import core.utils.Utils;
+import core.service.UIService;
 import core.view.CustomButton;
 import core.view.CustomCheckbox;
 import core.view.MainView;
 import core.view.TeamInfoView;
-import javafx.scene.control.CheckBox;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class UIController {
 
     private MainView view;
-    private UIModel uiModel;
+    private UIModel model;
+    private UIService service;
 
     public UIController(MainView view, List<Student> studentModel) {
         this.view = view;
-        this.uiModel = new UIModel();
+        this.model = new UIModel(studentModel);
+        this.service = new UIService(model, view);
 
-        if (view == null || Utils.isEmpty(studentModel)) {
+        if (view == null) {
             return;
         }
 
         List<TeamInfoView> teamViewList = view.getTeamViewList();
         teamViewList.forEach(v -> {
 
-            int studentIndex = v.getElementIndex();
-            String studentID = studentModel.get(studentIndex).getId();
-
             // Set button text and listener
             CustomButton memberButton = v.getTeamMember();
-            memberButton.setText(studentID);
             memberButton.setOnAction(event -> {
-                view.addButtonListener(memberButton, view.getStudentTF(), teamViewList, v);
+                view.addButtonListener(teamViewList, v, memberButton, model);
             });
 
             // for each member checkbox
             CustomCheckbox memberCB = v.getTeamMemberCB();
-            memberCB.setLabel(studentID);
             v.getTeamMemberCB().setOnAction(event -> {
-                view.addCheckboxListener(memberCB, view.getStudentTF(), teamViewList, v);
+                view.addCheckboxListener(teamViewList, v, memberCB, model);
             });
 
         });
 
         // add button
         view.getAddButton().setOnAction(event -> {
-            String searchID = view.getStudentTF().getText();
-            if (Utils.isBlank(searchID)) {
-                view.showErrAlert(Constants.EMPTY_STUDENT_KEY);
+            if (view.validateAddListener(model, view.getStudentTF())) {
+                service.formTeam(view.getStudentTF().getText());
             }
         });
 

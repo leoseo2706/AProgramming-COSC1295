@@ -72,6 +72,15 @@ public class Utils {
         return props.getProperty(key);
     }
 
+    public static String getTextPropSilently(String key) {
+        try {
+            return getTextProp(key);
+        } catch (CustomException e) {
+            //ignore
+        }
+        return Constants.EMPTY;
+    }
+
     public static int getIntProp(String key) throws CustomException {
         try {
             return Integer.parseInt(getTextProp(key));

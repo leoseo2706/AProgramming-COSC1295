@@ -7,14 +7,12 @@ public class TeamInfoView {
     private Label teamName;
     private CustomButton teamMember;
     private CustomCheckbox teamMemberCB;
-    private int elementIndex;
 
     public TeamInfoView(Label teamName, CustomButton teamMember,
-                        CustomCheckbox teamMemberCB, int elementIndex) {
+                        CustomCheckbox teamMemberCB) {
         this.teamName = teamName;
         this.teamMember = teamMember;
         this.teamMemberCB = teamMemberCB;
-        this.elementIndex = elementIndex;
     }
 
     public Label getTeamName() {
@@ -29,7 +27,4 @@ public class TeamInfoView {
         return teamMemberCB;
     }
 
-    public int getElementIndex() {
-        return elementIndex;
-    }
 }

@@ -23,6 +23,10 @@ public class Constants {
     public final static String MAX_PERSONALITY_KEY = "max.personality.threshold";
 
     public final static String EMPTY_STUDENT_KEY = "empty.student.id.err";
+    public final static String EMPTY_CELL_KEY = "empty.cell.add.err";
+    public final static String MULTIPLE_CELL_KEY = "multiple.cell.add.err";
+    public final static String INVALID_STUDENT_ID_KEY = "invalid.student.id.err";
+    public final static String EXISTED_STUDENT_ID_KEY = "existed.student.id.err";
 
 
     public final static String HIGHLIGHT_CLASS = "highlight";

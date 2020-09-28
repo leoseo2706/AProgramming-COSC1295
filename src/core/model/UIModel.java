@@ -1,21 +1,28 @@
 package core.model;
 
+import java.util.*;
+
 public class UIModel {
 
-    private String selectedID;
+    private Map<String, Integer> selectedIndexes;
+    private Map<String, List<FormedMember>> formedTeam;
+    private List<Student> allStudents;
 
-    public UIModel() {
+    public UIModel(List<Student> allStudents) {
+        this.selectedIndexes = new HashMap<>();
+        this.formedTeam = new LinkedHashMap<>();
+        this.allStudents = allStudents;
     }
 
-    public UIModel(String selectedID) {
-        this.selectedID = selectedID;
+    public Map<String, Integer> getSelectedIndexes() {
+        return selectedIndexes;
     }
 
-    public String getSelectedID() {
-        return selectedID;
+    public Map<String, List<FormedMember>> getFormedTeam() {
+        return formedTeam;
     }
 
-    public void setSelectedID(String selectedID) {
-        this.selectedID = selectedID;
+    public List<Student> getAllStudents() {
+        return allStudents;
     }
 }
